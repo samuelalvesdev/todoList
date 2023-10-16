@@ -24,4 +24,18 @@
       });
     },
   };
+
+  const taskController = (view: typeof taskView) => {
+    const task: Array<Object> = [todo, reminder];
+
+    const handleEvent = (event: Event) => {
+      event.preventDefault();
+      view.render(task);
+    };
+    document
+      .getElementById("taskForm")
+      ?.addEventListener("submit", handleEvent);
+  };
+
+  taskController(taskView);
 })();

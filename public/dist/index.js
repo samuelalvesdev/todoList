@@ -22,4 +22,15 @@
             });
         },
     };
+    var taskController = function (view) {
+        var _a;
+        var task = [todo, reminder];
+        var handleEvent = function (event) {
+            event.preventDefault();
+            view.render(task);
+        };
+        (_a = document
+            .getElementById("taskForm")) === null || _a === void 0 ? void 0 : _a.addEventListener("submit", handleEvent);
+    };
+    taskController(taskView);
 })();
