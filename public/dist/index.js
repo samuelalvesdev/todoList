@@ -1,39 +1,61 @@
 "use strict";
 (function () {
+    var notificationPlataform;
+    (function (notificationPlataform) {
+        notificationPlataform["SMS"] = "SMS";
+        notificationPlataform["EMAIL"] = "EMAIL";
+        notificationPlataform["PUSH_NOTIFICATION"] = "PUSH_NOTIFICATION";
+    })(notificationPlataform || (notificationPlataform = {}));
+    var UUID = function () {
+        return Math.random().toString(32).substring(2, 9);
+    };
+    var dateUtils = {
+        tomorrow: function () {
+            var tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            return tomorrow;
+        },
+        today: function () {
+            return new Date();
+        },
+        formatDate: function (date) {
+            return "".concat(date.getDate(), ".").concat(date.getMonth() + 1, ".").concat(date.getFullYear());
+        },
+    };
     var Reminder = /** @class */ (function () {
         function Reminder(description, date, notifications) {
-            this.id = "";
-            this.dateCreated = new Date();
-            this.dateUpdate = new Date();
+            this.id = UUID();
+            this.dateCreated = dateUtils.today();
+            this.dateUpdate = dateUtils.today();
             this.description = "";
-            this.date = new Date();
-            this.notification = ["EMAIL"];
+            this.date = dateUtils.tomorrow();
+            this.notifications = [notificationPlataform.EMAIL];
             this.description = description;
             this.date = date;
-            this.notification = notifications;
+            this.notifications = notifications;
         }
         Reminder.prototype.render = function () {
-            return JSON.stringify(this);
+            return "\n      --->Reminder<---\n      description: ".concat(this.description, "\n      date: ").concat(dateUtils.formatDate(this.date), "\n      plataform: ").concat(this.notifications.join(","), "\n      ");
         };
         return Reminder;
     }());
     var Todo = /** @class */ (function () {
         function Todo(description) {
-            this.id = "";
-            this.dateCreated = new Date();
-            this.dateUpdate = new Date();
+            this.id = UUID();
+            this.dateCreated = dateUtils.today();
+            this.dateUpdate = dateUtils.today();
             this.description = "";
             this.done = false;
             this.description = description;
         }
         Todo.prototype.render = function () {
-            return JSON.stringify(this);
+            return "\n      --->TODO<---\n      description: ".concat(this.description, "\n      done: ").concat(this.done, "\n      ");
         };
         return Todo;
     }());
     var todo = new Todo("Todo criado com a classe");
     var reminder = new Reminder("Reminder criado com sucesso", new Date(), [
-        "EMAIL",
+        notificationPlataform.EMAIL,
     ]);
     var taskView = {
         render: function (tasks) {
